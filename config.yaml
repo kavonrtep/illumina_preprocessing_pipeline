@@ -1,0 +1,4 @@
+input_table: data/input_files.csv
+output_dir: output
+
+
