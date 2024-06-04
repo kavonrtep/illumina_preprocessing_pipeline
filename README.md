@@ -10,7 +10,7 @@ conda activate singularity3
 ```
 
 ## Quick Start
-Singularity image (.sif file) can be downloaded from **TODO**
+Singularity image (.sif file) can be downloaded from https://github.com/kavonrtep/illumina_preprocessing_pipeline/releases
 
 Format of config.yaml file is as follows:
 
