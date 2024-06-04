@@ -19,10 +19,11 @@ input_table: data/input_files.csv
 output_dir: output
 ```
 input_table is space delimited file with following columns:
-1. path to forward reads FASTQ
-2. path to reverse read FASTQ
-3. prefix used for output files
-example of input_table:
+1. Path to forward reads FASTQ
+2. Path to reverse read FASTQ
+3. Prefix used for output files
+
+Example of input_table:
 
 |                                                  |                                                   ||
 |--------------------------------------------------|---------------------------------------------------|-|
