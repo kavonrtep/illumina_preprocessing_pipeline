@@ -18,9 +18,9 @@ Format of config.yaml file is as follows:
 input_table: data/input_files.csv
 output_dir: output
 ```
-input_table is space delimited file with following columns:
+File with `input_table` is tab delimited file with following columns:
 1. Path to forward reads FASTQ
-2. Path to reverse read FASTQ
+2. Path to reverse reads FASTQ
 3. Prefix used for output files
 
 Example of input_table:
