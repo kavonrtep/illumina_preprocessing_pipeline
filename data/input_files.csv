@@ -1,3 +1,6 @@
 data/18036D-07-01_S152_L004_R1_001.fastq.gz	data/18036D-07-01_S152_L004_R2_001.fastq.gz	Prefix1
 data/18036D-07-02_S153_L004_R1_001.fastq.gz	data/18036D-07-02_S153_L004_R2_001.fastq.gz	Prefix2
 data/18036D-07-03_S154_L004_R1_001.fastq.gz	data/18036D-07-03_S154_L004_R2_001.fastq.gz	Prefix3
+data/18036D-07-01_S152_L004_R1_00x.fastq.gz	data/18036D-07-01_S152_L004_R2_00x.fastq.gz	Prefix4
+data/18036D-07-02_S153_L004_R1_00x.fastq.gz	data/18036D-07-02_S153_L004_R2_00x.fastq.gz	Prefix5
+data/18036D-07-03_S154_L004_R1_00x.fastq.gz	data/18036D-07-03_S154_L004_R2_00x.fastq.gz	Prefix6

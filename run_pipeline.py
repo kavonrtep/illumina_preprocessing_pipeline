@@ -29,6 +29,8 @@ def check_all_fastq_paths(config_object):
     with open(config_object['input_table'], 'r') as file:
         for line in file:
             items = line.strip().split("\t")
+            if len(items) != 3:
+                continue
             # get directory name of the file
             fastq_files.append(items[0])
             fastq_files.append(items[1])
@@ -38,7 +40,6 @@ def check_all_fastq_paths(config_object):
             print(F"File {f} does not exist or is not accessible")
             show_singularity_settings(config_object)
             exit(1)
-
 
 def main():
     # get arguments

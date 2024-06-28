@@ -17,9 +17,17 @@ def create_dirs(*dirs):
 subdirs = [config['output_dir']+"/"+i for i in ["adapter_trimming/fastqc",
                                                 "quality_and_trim/fastqc",
                                                 "original_fastqc"]]
+# create output directories
 create_dirs(*subdirs)
 
-# create output directories
+number_of_jobs = len(get_jobs(config['input_table']))
+print(f"Number of jobs: {number_of_jobs}")
+number_of_cores = workflow.cores
+print(f"Number of cores: {number_of_cores}")
+n_cores_per_job = int(number_of_cores/number_of_jobs)
+if n_cores_per_job < 1:
+    n_cores_per_job = 1
+print(f"Number of cores per job: {n_cores_per_job}")
 
 
 
@@ -52,7 +60,7 @@ rule trimmomatic:
         output_dir=config['output_dir']
     conda:
         "envs/trimmomatic.yaml"
-    threads: workflow.cores
+    threads: n_cores_per_job
     shell:
         """
         echo {input}
@@ -88,16 +96,19 @@ rule fastqc:
         output_dir=config['output_dir']
     conda:
         "envs/fastqc.yaml"
-    threads: workflow.cores
+    threads: n_cores_per_job
     shell:
         """
+        echo "_________________________________________________________________"
+        echo "Running fastqc on {input.forward_fastq} and {input.reverse_fastq}"
         dir1=$(dirname {input.p1})
         dir1out=$(dirname {output.qc1})
         dir2=$(dirname {input.p1p})
         dir2out=$(dirname {output.qc2})
         fastqc $dir1/*.fastq.gz -o $dir1out -c {threads}
         fastqc $dir2/*.fastq.gz -o $dir2out -c {threads}
-        fastqc {input.forward_fastq} {input.reverse_fastq} -o {params.qc_ori_dir}
+        fastqc {input.forward_fastq} {input.reverse_fastq} -o {params.qc_ori_dir} -c {threads}
+        wait
         touch {output.fastqc_done}
         """
 
