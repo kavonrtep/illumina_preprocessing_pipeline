@@ -61,5 +61,5 @@ To build the container, run the following command:
 
 ```bash
 SINGULARITY=`which singularity`
-sudo $SINGULARITY build illumina_preprocessing_pipeline.sif Singularity
+sudo $SINGULARITY build illumina_preprocessing_pipeline_0.1.1.sif Singularity
 ```

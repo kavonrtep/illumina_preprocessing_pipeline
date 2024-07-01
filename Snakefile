@@ -105,10 +105,9 @@ rule fastqc:
         dir1out=$(dirname {output.qc1})
         dir2=$(dirname {input.p1p})
         dir2out=$(dirname {output.qc2})
-        fastqc $dir1/*.fastq.gz -o $dir1out -c {threads}
-        fastqc $dir2/*.fastq.gz -o $dir2out -c {threads}
-        fastqc {input.forward_fastq} {input.reverse_fastq} -o {params.qc_ori_dir} -c {threads}
-        wait
+        fastqc $dir1/*.fastq.gz -o $dir1out -t {threads}
+        fastqc $dir2/*.fastq.gz -o $dir2out -t {threads}
+        fastqc {input.forward_fastq} {input.reverse_fastq} -o {params.qc_ori_dir} -t {threads}
         touch {output.fastqc_done}
         """
 
@@ -130,6 +129,6 @@ rule multiqc:
     shell:
        """
        cd {params.output_dir}
-       multiqc --dirs --fullnames -f .
+       multiqc --module fastqc --dirs --fullnames -f . 
        """
 
