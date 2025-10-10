@@ -17,6 +17,7 @@ Format of config.yaml file is as follows:
 ```yaml
 input_table: data/input_files.csv
 output_dir: output
+adapter: path/to/adapter/file.fa  # OPTIONAL
 ```
 File with `input_table` is tab delimited file with following columns:
 1. Path to forward reads FASTQ
@@ -61,5 +62,5 @@ To build the container, run the following command:
 
 ```bash
 SINGULARITY=`which singularity`
-sudo $SINGULARITY build illumina_preprocessing_pipeline_0.1.1.sif Singularity
+sudo ionice $SINGULARITY build illumina_preprocessing_pipeline_0.1.3.sif Singularity
 ```

@@ -1,4 +1,5 @@
 input_table: data/input_files.csv
 output_dir: output
+adapter: data/test  # Optional: path to custom adapter FASTA file
 
 

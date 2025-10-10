@@ -44,11 +44,11 @@ rule all:
 
 
 
-
 rule trimmomatic:
     input:
         forward_fastq=lambda wildcards: [job[0] for job in get_jobs(config['input_table']) if job[2] == wildcards.prefix][0],
-        reverse_fastq=lambda wildcards: [job[1] for job in get_jobs(config['input_table']) if job[2] == wildcards.prefix][0]
+        reverse_fastq=lambda wildcards: [job[1] for job in get_jobs(config['input_table']) if job[2] == wildcards.prefix][0],
+        custom_adapter=lambda wildcards: config.get('adapter', '') if config.get('adapter') else []
     output:
         p1="{output_dir}/adapter_trimming/{prefix}_adapt_trim_1P.fastq.gz",
         p2="{output_dir}/adapter_trimming/{prefix}_adapt_trim_2P.fastq.gz",
@@ -57,7 +57,10 @@ rule trimmomatic:
         p1p="{output_dir}/quality_and_trim/{prefix}_prep.fastq.gz",
     params:
         base="{output_dir}/adapter_trimming/{prefix}_adapt_trim.fastq.gz",
-        output_dir=config['output_dir']
+        output_dir=config['output_dir'],
+        use_custom_adapter=lambda wildcards: "yes" if config.get('adapter') else "no",
+        custom_adapter_path=lambda wildcards: config.get('adapter', ''),
+        adapter_file=lambda wildcards: f"{config['output_dir']}/adapters_combined.fa" if config.get('adapter') else ""
     conda:
         "envs/trimmomatic.yaml"
     threads: n_cores_per_job
@@ -68,9 +71,20 @@ rule trimmomatic:
         which trimmomatic
         PATH_TO_ADAPTERS=$(dirname $(which trimmomatic))/../share/trimmomatic/adapters/TruSeq3-PE.fa
         echo "-------------------"
-        echo "Using adapters from $PATH_TO_ADAPTERS"
-        ls -l $PATH_TO_ADAPTERS
-        trimmomatic PE -threads {threads} {input.forward_fastq} {input.reverse_fastq} -baseout {params.base} ILLUMINACLIP:$PATH_TO_ADAPTERS:2:30:10:8:true MINLEN:20
+
+        # Handle custom adapters if provided
+        if [ "{params.use_custom_adapter}" = "yes" ]; then
+            echo "Using custom adapter file: {params.custom_adapter_path}"
+            cat  {params.custom_adapter_path} $PATH_TO_ADAPTERS > "{params.adapter_file}"
+            ADAPTER_FILE="{params.adapter_file}"
+            echo "Combined adapters saved to $ADAPTER_FILE"
+        else
+            ADAPTER_FILE=$PATH_TO_ADAPTERS
+            echo "Using default adapters from $ADAPTER_FILE"
+        fi
+
+        ls -l $ADAPTER_FILE
+        trimmomatic PE -threads {threads} {input.forward_fastq} {input.reverse_fastq} -baseout {params.base} ILLUMINACLIP:$ADAPTER_FILE:2:30:10:8:true MINLEN:20
         trimmomatic SE -threads {threads} {output.p1} {output.p1p} HEADCROP:9 MAXINFO:100:0.8 CROP:100 MINLEN:100
         """
 

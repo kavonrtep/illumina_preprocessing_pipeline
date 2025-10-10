@@ -2,14 +2,16 @@ Bootstrap: docker
 From: continuumio/miniconda3
 
 %post
+
     mkdir -p /opt/conda/config
     export CONDARC=/opt/conda/config/.condarc
+    export CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes
 
+    conda install python=3.11
 
-    # Install Snakemake and mamba
-    conda install -c bioconda -c conda-forge mamba
-    mamba install -c bioconda -c conda-forge snakemake=8.12.0 mamba
-
+    # Install Snakemake
+    conda install -c bioconda -c conda-forge snakemake=8.12.0
+    # mamba install h5py
     # configure strict channel priority
     conda config --set channel_priority strict
     conda init bash
@@ -25,10 +27,10 @@ From: continuumio/miniconda3
     conda config --show | grep channel_priority
 
     cd /opt/pipeline/
-    snakemake --use-conda --conda-prefix /opt/conda/envs --conda-create-envs-only --conda-frontend mamba --cores 4 --configfile /opt/pipeline/config.yaml
+    snakemake --use-conda --conda-prefix /opt/conda/envs --conda-create-envs-only --conda-frontend conda --cores 4 --configfile /opt/pipeline/config.yaml
 
     # Clean up
-    mamba clean --all
+    conda clean --all
 
     # make root accessible for everyone
     chmod -R 777 /root

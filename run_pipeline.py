@@ -105,7 +105,7 @@ config.yaml file. """,
 
     cmd = (F"snakemake --snakefile {script_dir}/Snakefile --configfile {args.config} "
            F"--cores {args.threads} --use-conda --conda-prefix {CONDA_ENVS_PATH} "
-           F"--conda-frontend mamba --show-failed-logs")
+           F" --show-failed-logs  --conda-frontend conda ")
 
     # append cache dir to other environment variables
     env = os.environ.copy()
